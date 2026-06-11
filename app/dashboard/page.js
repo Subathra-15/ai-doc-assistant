@@ -11,7 +11,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+      const { data: { session } } = await supabase.auth.getSession() //check if there is any user logged in currently
 
       if (!session) {
         router.push('/login')
