@@ -1,18 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react' 
+import { supabase } from '@/lib/supabase' //supabase client
+import { useRouter } from 'next/navigation' //router to redirect
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false) //keep track if the form is submitting
+  const router = useRouter() //router object
 
   const handleSignUp = async (e) => {
-    e.preventDefault()
+    e.preventDefault() //stops from refreshing the page
     setLoading(true)
     setError('')
 
@@ -24,7 +24,7 @@ export default function SignUp() {
       return
     }
 
-    router.push('/dashboard')
+    router.push('/dashboard') //if signup worked return to the dashboard
   }
 
   return (
