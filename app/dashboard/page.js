@@ -120,9 +120,19 @@ export default function Dashboard() {
             <ul className="flex flex-col gap-3">
               {files.map((file) => (
                 <li key={file.id} className="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-3">
-                  <span className="text-sm text-gray-700">{file.name}</span>
-                  <span className="text-xs text-gray-400">PDF</span>
-                </li> // loop through and list out the files
+  <span className="text-sm text-gray-700">{file.name}</span>
+  <button
+    onClick={async () => {
+      await supabase.storage
+        .from('pdfs')
+        .remove([`${user.id}/${file.name}`])
+      await fetchFiles(user.id)
+    }}
+    className="text-xs text-red-500 hover:text-red-700"
+  >
+    Delete
+  </button>
+</li> //loop through the files and lists them
               ))}
             </ul>
           )}
