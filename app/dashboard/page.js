@@ -1,20 +1,20 @@
-'use client'
+'use client' //client component
 
 import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { supabase } from '../../lib/supabase' //supabase client for storange and auth
 import { useRouter } from 'next/navigation'
 
 export default function Dashboard() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
-  const [files, setFiles] = useState([])
+  const [files, setFiles] = useState([]) //stores the list of stored files
   const [uploadError, setUploadError] = useState('')
   const router = useRouter()
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+      const { data: { session } } = await supabase.auth.getSession() //checks if the user is logged in via getSession if not redirect to login page
 
       if (!session) {
         router.push('/login')
@@ -32,7 +32,7 @@ export default function Dashboard() {
   const fetchFiles = async (userId) => {
     const { data, error } = await supabase.storage
       .from('pdfs')
-      .list(userId)
+      .list(userId) //goes into pdfs bucket, lists all files named after the id. if success save files to state
 
     if (error) {
       console.error('Error fetching files:', error)
@@ -43,7 +43,7 @@ export default function Dashboard() {
   }
 
   const handleUpload = async (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0] //gets the first file the user selects
     if (!file) return
 
     if (file.type !== 'application/pdf') {
@@ -54,12 +54,12 @@ export default function Dashboard() {
     setUploading(true)
     setUploadError('')
 
-    const cleanName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const filePath = `${user.id}/${Date.now()}_${cleanName}`
+    const cleanName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_') //replaces any special character with underscore
+    const filePath = `${user.id}/${Date.now()}_${cleanName}` //creates a unique path name
 
     const { error } = await supabase.storage
       .from('pdfs')
-      .upload(filePath, file)
+      .upload(filePath, file) //uploads the file to supabase storage
 
     if (error) {
       setUploadError(error.message)
@@ -76,7 +76,7 @@ export default function Dashboard() {
       <main className="min-h-screen flex items-center justify-center bg-gray-50">
         <p className="text-gray-500">Loading...</p>
       </main>
-    )
+    ) //shows a loading screen while loading
   }
 
   return (
@@ -122,7 +122,7 @@ export default function Dashboard() {
                 <li key={file.id} className="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-3">
                   <span className="text-sm text-gray-700">{file.name}</span>
                   <span className="text-xs text-gray-400">PDF</span>
-                </li>
+                </li> // loop through and list out the files
               ))}
             </ul>
           )}
